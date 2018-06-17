@@ -1,0 +1,11 @@
+server/app/**/*.js
+server/app/**/*.js.map
+server/cli/**/*.js
+server/cli/**/*.js.map
+
+node_modules
+
+public/asset/css/**/*
+public/asset/js/**/*
+
+.idea

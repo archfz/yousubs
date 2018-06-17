@@ -1,0 +1,10 @@
+html
+    head
+        title= title
+        each script in scripts
+            script(src=script)
+        each style in styles
+            style(scr=style)
+    body
+        div.content
+            block content

@@ -1,0 +1,18 @@
+extends ../main.pug
+
+block content
+    div.login
+        form(method='POST' action='/login')
+            label Mail client to connect to
+            select(name="mailClient")
+                each variable in [{id: "gmail", name: "Gmail"}]
+                    option(value=variable.id) #{variable.name}
+
+            label User id
+            input(type='text' name='id')
+
+            label Password
+            input(type='password' name='password')
+
+            button Login
+

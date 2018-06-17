@@ -1,0 +1,57 @@
+{
+  "name": "mail-yousubs",
+  "version": "0.1.0",
+  "description": "Script that plays your youtube subsription emails. (gmail)",
+  "main": "start.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc && gulp",
+    "develop": "tsc --watch",
+    "lint": "tslint --project ./",
+    "start": "npm run build && node start.js"
+  },
+  "keywords": [
+    "youtube",
+    "player",
+    "gmail",
+    "subscription",
+    "controls",
+    "easy"
+  ],
+  "author": "Fodor Zoltan",
+  "license": "GPL-2.0",
+  "dependencies": {
+    "@types/cookie-parser": "^1.4.1",
+    "@types/errorhandler": "0.0.32",
+    "@types/express": "^4.16.0",
+    "@types/express-session": "^1.15.10",
+    "@types/method-override": "0.0.31",
+    "@types/morgan": "^1.7.35",
+    "commander": "^2.15.1",
+    "configstore": "^3.1.2",
+    "cookie-parser": "^1.4.3",
+    "dateformat": "^3.0.3",
+    "errorhandler": "^1.5.0",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "googleapis": "^27.0.0",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-sass": "^4.0.1",
+    "gulp-uglify": "^3.0.0",
+    "iohook": "^0.2.0",
+    "method-override": "^2.3.10",
+    "morgan": "^1.9.0",
+    "pug": "^2.0.3",
+    "socket.io": "^2.1.1",
+    "socket.io-express-session": "^0.1.3",
+    "typedi": "^0.7.3"
+  },
+  "devDependencies": {
+    "@types/es6-promise": "^3.3.0",
+    "@types/node": "^10.3.2",
+    "reflect-metadata": "^0.1.12",
+    "tslint": "^5.10.0",
+    "typescript": "^2.9.1"
+  }
+}

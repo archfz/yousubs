@@ -1,0 +1,46 @@
+extends ../main.pug
+
+mixin errors(errorList)
+    if errorList
+        div.errors
+        each error in errorList
+            span #{error}
+
+block content
+    div.register
+        form(method='POST' action='/register')
+
+            label Id
+            input(type='text' name='id' value=input.id)
+            +errors(errors.id)
+
+            label Password
+            input(type='password' name='password')
+            +errors(errors.password)
+
+            label Password again
+            input(type='password' name='password_re')
+            +errors(errors.password_re)
+
+            label Mail client to connect to
+            select(name="mailClient")
+                each variable in [{id: "gmail", name: "Gmail"}]
+                    option(value=variable.id selected=input.mailClient == variable.id) #{variable.name}
+            +errors(errors.mailClient)
+
+            if input.mailClient === "gmail"
+                div#client_gmail
+                    label Gmail oAuth2 credentials JSON
+                    textarea(name="credentials") #{input.credentials}
+                    +errors(errors.credentials)
+                    a(href="https://developers.google.com/gmail/api/auth/about-auth" target="_blank") See here how to obtain oAuth2 credentials for gmail.
+
+                    if input.credentials && token_link
+                        label Gmail oAuth2 token
+                        input(name="token")
+                        +errors(errors.token)
+                        a(href=token_link target = "_blank") Get token by accessing this link.
+
+
+            button Register
+
