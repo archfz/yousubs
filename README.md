@@ -4,6 +4,14 @@ Yousubs is here to make it easier going through all the youtube
 subscription notification emails. Reduce all those click to just
 a setup and global shortcuts. Best suited for music.
 
+## Legend
+
+- [Installation](#Installation)
+- [Benefits](#benefits)
+- [Usage](#usage)
+
+![demo](./misc/demo.png)
+
 ## Installation
 
 1. Install node if you don't already have it [https://nodejs.org/en/](https://nodejs.org/en/)
