@@ -16,6 +16,7 @@ gulp.task('watch', function(){
 gulp.task('sass', function(){
   return gulp.src(sassPath)
     .pipe(sass()) // Converts Sass to CSS with gulp-sass
+    .pipe(concat('main.css'))
     .pipe(gulp.dest('public/asset/css/'))
 });
 
@@ -23,7 +24,7 @@ gulp.task('sass', function(){
 gulp.task('scripts', function() {
   gulp.src(jsPath)
     .pipe(concat('main.js'))
-    .pipe(uglify())
+    // .pipe(uglify())
     .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
     .pipe(gulp.dest('public/asset/js/'));
 });

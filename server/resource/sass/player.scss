@@ -1,0 +1,66 @@
+.player {
+  max-width: 640px;
+  margin: auto;
+  background: #000000;
+  border-radius: 5px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+  animation: player 4s infinite;
+
+  iframe {
+    margin: 0;
+  }
+
+  #video {
+    margin-top: 20px;
+  }
+
+  .likes, .history {
+    padding: 5px 20px 20px;
+
+    span {
+      opacity: 0.6;
+      font-size: 13px;
+      font-weight: bold;
+    }
+  }
+
+  #controls {
+    display: table;
+    width: 100%;
+  }
+
+  .control {
+    display: table-cell;
+    text-align: center;
+
+    button {
+      display: block;
+      width: 100%;
+      font-size: 17px;
+      padding: 10px 10px;
+      margin: auto;
+    }
+
+    .shortcut {
+      display: block;
+      font-size: 12px;
+      opacity: 0.35;
+      font-weight: bold;
+      clear: both;
+      text-shadow: 1px 1px 1px rgba(0,0,0,.2);
+    }
+  }
+}
+
+@keyframes player {
+  0% {
+    box-shadow: 0 0 0px rgba(102, 110, 125, 0);
+  }
+  50% {
+    box-shadow: 0 0 20px 7px rgb(0, 0, 0),
+      0 0 60px 15px rgba(102, 110, 125, 0.28);
+  }
+  100% {
+    box-shadow: 0 0 0px rgba(102, 110, 125, 0);
+  }
+}

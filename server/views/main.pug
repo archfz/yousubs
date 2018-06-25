@@ -1,10 +1,17 @@
 html
     head
+        meta(charset="UTF-8")
         title= title
-        each script in scripts
-            script(src=script)
         each style in styles
-            style(scr=style)
+            link(rel="stylesheet" href=style)
     body
+        div.header
+            h1 You
+                span Subs
+            h4 by archfz
+
         div.content
             block content
+
+    each script in scripts
+        script(src=script)

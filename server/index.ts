@@ -70,7 +70,7 @@ class Server {
       store: new session.MemoryStore(),
       saveUninitialized: true,
       cookie: {
-        maxAge: 60000
+        maxAge: 3600000 * 24
       }
     });
     this.app.use(this.session);

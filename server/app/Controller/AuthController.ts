@@ -46,13 +46,28 @@ export class AuthController extends BaseController {
         if (output === "") {
           res.redirect("/register");
         } else {
-          this.render(req, res, "pages/login", {});
+          this.render(req, res, "pages/login", {errors: {}});
         }
       }).catch(console.error);
   }
 
   public doLogin(req: Request, res: Response, next: NextFunction) {
     const {id, password, mailClient} = (req as any).body;
+    const errors: any = {};
+
+    if (!id) {
+      errors.id = ["Id is required."];
+    }
+    if (!password) {
+      errors.password = ["Password is required."];
+    }
+
+    if (Object.keys(errors).length) {
+      return this.render(req, res, "pages/login", {
+        input: {id},
+        errors
+      });
+    }
 
     YousubsCommand.execute("check-auth", id, password, "-m", mailClient)
       .then((output: string) => {
@@ -71,7 +86,7 @@ export class AuthController extends BaseController {
       .catch((output: string) => {
         if (output.indexOf("USER_NOT_FOUND") !== -1) {
           this.render(req, res, "pages/login", {
-            input: {id},
+            input: {id, mailClient},
             errors: {
               misc: `User with id '${id}' is not registered on ${mailClient} client.`
             }

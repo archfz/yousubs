@@ -20,6 +20,8 @@ export class BaseController {
    */
   constructor() {
     this.title = "Base route";
+
+    this.addStyle("/asset/css/main.css");
   }
 
   /**

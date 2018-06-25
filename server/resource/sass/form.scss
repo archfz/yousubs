@@ -1,0 +1,59 @@
+form {
+  max-width: 500px;
+
+  input[type=text], input[type=password], textarea, select {
+    color: #8d98ac;
+    background: #242424;
+    border: 1px solid #4e4e4e;
+    box-shadow: 1px 1px 1px rgba(75, 75, 75, 0.56);
+    padding: 6px 10px;
+    display: block;
+    border-radius: 2px;
+    margin-bottom: 4px;
+    transition: background 0.1s, border-color 0.1s;
+
+    &:hover {
+      background: #201e20;
+      border: 1px solid #383838;
+    }
+  }
+
+  .errors {
+    background: #c66653;
+    margin-top: -5px;
+    border-radius: 0 0 2px 2px;
+    padding: 5px;
+    color: #342929;
+
+    span {
+      color: #342929;
+    }
+
+    * {
+      font-size: 14px;
+    }
+  }
+
+  label {
+    display: block;
+    margin-top: 14px;
+    margin-bottom: 3px;
+    opacity: 0.8;
+  }
+}
+
+button {
+  background: #192229;
+  color: #8d98ac;
+  border-radius: 2px;
+  padding: 5px 20px;
+  border: 1px solid #2f3e47;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.1s;
+
+  &:hover {
+    background: #25323d;
+    border: 1px solid #4b6472;
+  }
+}

@@ -45,6 +45,7 @@ export class IndexController extends BaseController {
     this.title = "Home";
     this.addScript("https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js");
     this.addScript("asset/js/main.js");
+    this.addScript("http://www.youtube.com/player_api");
 
     if (!Auth.isLoggedIn(req.session)) {
       return res.redirect("/login");

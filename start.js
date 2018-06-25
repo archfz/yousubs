@@ -85,3 +85,8 @@ function onListening() {
 }
 
 console.log("Server started.");
+
+var opn = require('opn');
+
+// opens the url in the default browser
+opn('http://localhost:' + httpPort);

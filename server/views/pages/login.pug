@@ -1,18 +1,37 @@
 extends ../main.pug
 
+mixin errors(errorList, misc)
+    if errorList
+        if misc
+            div.errors.misc
+                each error in errorList
+                    span #{error}
+        else
+            div.errors
+                each error in errorList
+                    span #{error}
+
 block content
     div.login
+        h2 Login
+
         form(method='POST' action='/login')
+            +errors(errors.misc)
+
             label Mail client to connect to
             select(name="mailClient")
                 each variable in [{id: "gmail", name: "Gmail"}]
                     option(value=variable.id) #{variable.name}
 
             label User id
-            input(type='text' name='id')
+            input(type='text' name='id' value=(input && input.id))
+            +errors(errors.id)
 
             label Password
             input(type='password' name='password')
+            +errors(errors.password)
 
             button Login
+
+            a(href="/register") register
 

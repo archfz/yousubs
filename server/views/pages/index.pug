@@ -1,6 +1,24 @@
 extends ../main.pug
 
 block content
-    div#controls
-        button#next_video Next track
-    div#video
+    div.player
+        div#video
+
+        div#controls
+            div.control
+                button#next_video Next video
+                    span.shortcut CTRL + ALT + ~
+            div.control
+                button#forward Forward (20s)
+                    span.shortcut CTRL + ALT + RIGHT
+            div.control
+                button#like Like
+                    span.shortcut CTRL + ALT + NUM0
+
+        div.lists
+            div.likes
+                h3 Likes
+                div#likes
+            div.history
+                h3 History
+                div#history

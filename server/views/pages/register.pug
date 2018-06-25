@@ -1,14 +1,20 @@
 extends ../main.pug
 
-mixin errors(errorList)
+mixin errors(errorList, misc)
     if errorList
-        div.errors
-        each error in errorList
-            span #{error}
+        if misc
+            div.errors.misc
+                each error in errorList
+                    span #{error}
+        else
+            div.errors
+                each error in errorList
+                    span #{error}
 
 block content
     div.register
         form(method='POST' action='/register')
+            +errors(errors.misc, true)
 
             label Id
             input(type='text' name='id' value=input.id)

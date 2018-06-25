@@ -14,8 +14,6 @@ export default class YousubsCommand {
     }).join(" ");
 
     return new Promise<string>((resolve: any, reject: any) => {
-
-      console.log("Calling: " + "node cli/index.js " + command);
       process.exec("node cli/index.js " + command, (err: any, stdout: any, stderr: any) => {
         if (err) {
           reject(stderr);
