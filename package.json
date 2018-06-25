@@ -1,14 +1,18 @@
 {
-  "name": "mail-yousubs",
+  "name": "yousubs",
   "version": "0.1.0",
   "description": "Script that plays your youtube subsription emails. (gmail)",
   "main": "start.js",
+  "bin": {
+    "yousubs": "start.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc && gulp",
     "develop": "tsc --watch",
     "lint": "tslint --project ./",
-    "start": "npm run build && node start.js"
+    "start": "npm run build && node start.js",
+    "postinstall": "npm run build"
   },
   "keywords": [
     "youtube",

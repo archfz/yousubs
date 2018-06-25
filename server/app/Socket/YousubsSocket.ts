@@ -5,7 +5,10 @@ export default class YousubsSocket {
 
   public static create(socket: any): void {
     const socketInstance: any = new this(socket);
-    this.openSockets.push(socketInstance);
+  }
+
+  public static remove(socket: any): void {
+    this.openSockets.splice(this.openSockets.indexOf(socket), 1);
   }
 
   public static setNextTrackAll() {
@@ -39,6 +42,8 @@ export default class YousubsSocket {
     this.socket = socket;
     this.session = socket.handshake.session;
 
+    socket.on("disconnect", () => YousubsSocket.remove(this));
+
     if (this.session.user) {
       this.acquireNextList();
       socket.on("set next", this.setNext.bind(this));
@@ -47,6 +52,8 @@ export default class YousubsSocket {
 
       socket.emit("history", YousubsSocket.history);
       socket.emit("likes", YousubsSocket.likes);
+
+      YousubsSocket.openSockets.push(this);
     } else {
       console.error("Socket io initialized without session.");
     }
