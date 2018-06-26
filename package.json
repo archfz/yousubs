@@ -1,10 +1,11 @@
 {
   "name": "yousubs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Script that plays your youtube subsription emails. (gmail)",
   "main": "start.js",
   "bin": {
-    "yousubs": "start.js"
+    "yousubs": "start.js",
+    "yousubs-cli": "cli/index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -50,12 +51,10 @@
     "pug": "^2.0.3",
     "socket.io": "^2.1.1",
     "socket.io-express-session": "^0.1.3",
-    "typedi": "^0.7.3"
-  },
-  "devDependencies": {
+    "typedi": "^0.7.3",
+    "reflect-metadata": "^0.1.12",
     "@types/es6-promise": "^3.3.0",
     "@types/node": "^10.3.2",
-    "reflect-metadata": "^0.1.12",
     "tslint": "^5.10.0",
     "typescript": "^2.9.1"
   }

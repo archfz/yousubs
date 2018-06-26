@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import "reflect-metadata";
 import {Container} from "typedi";
 import Cli from "./Cli";
