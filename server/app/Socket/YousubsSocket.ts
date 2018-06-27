@@ -128,12 +128,12 @@ export default class YousubsSocket {
 iohook.registerShortcut([29, 56, 41], () => {
   YousubsSocket.setNextTrackAll();
 });
-// CTRL + ALT + RIGHT
-iohook.registerShortcut([29, 56, 61005], () => {
+// CTRL + ALT + (NUM)Del
+iohook.registerShortcut([29, 56, 83], () => {
   YousubsSocket.forwardAll();
 });
-// CTRL + ALT + NUM0
-iohook.registerShortcut([29, 56, 82], () => {
+// CTRL + ALT + *
+iohook.registerShortcut([29, 56, 55], () => {
   YousubsSocket.likeAll();
 });
 
