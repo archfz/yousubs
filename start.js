@@ -7,7 +7,7 @@ const debug = require("debug")("express:server");
 const http = require("http");
 
 //register http server
-const httpPort = normalizePort(process.env.PORT || 8080);
+const httpPort = normalizePort(process.env.PORT || 8085);
 const serverInstance = server.bootstrap();
 const app = serverInstance.app;
 app.set("port", httpPort);
@@ -54,9 +54,9 @@ function onError(error) {
     throw error;
   }
 
-  const bind = typeof port === "string"
-    ? "Pipe " + port
-    : "Port " + port;
+  const bind = typeof httpPort === "string"
+    ? "Pipe " + httpPort
+    : "Port " + httpPort;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {

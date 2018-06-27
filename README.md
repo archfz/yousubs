@@ -14,6 +14,8 @@ a setup and global shortcuts. Best suited for music.
 
 ## Installation
 
+xserver-xorg-dev libxext-dev libxss-dev xscreensaver
+
 1. Install node if you don't already have it [https://nodejs.org/en/](https://nodejs.org/en/)
 2. Install yousubs by running in a shell ``npm install -g yousubs``
 
@@ -24,6 +26,7 @@ a setup and global shortcuts. Best suited for music.
 - Adds global shortcuts for liking, skipping and forwarding.
 - Is usable while doing other tasks, like gaming.
 - Keeps history of played tracks.
+- Optional IDLE pause so that you don't miss any tracks.
 
 ## Usage
 

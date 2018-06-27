@@ -1,5 +1,8 @@
 import YousubsCommand from "../Util/YousubsCommand";
 const iohook = require("iohook");
+const desktopIdle = require("desktop-idle");
+
+const MAX_IDLE_TIME = 1000 * 60;
 
 export default class YousubsSocket {
 
@@ -26,6 +29,12 @@ export default class YousubsSocket {
   public static forwardAll() {
     this.openSockets.forEach((socket: YousubsSocket) => {
       socket.forward();
+    });
+  }
+
+  public static pauseAll() {
+    this.openSockets.forEach((socket: YousubsSocket) => {
+      socket.pause();
     });
   }
 
@@ -99,6 +108,10 @@ export default class YousubsSocket {
     this.socket.emit("forward");
   }
 
+  public pause(): void {
+    this.socket.emit("pause");
+  }
+
   protected acquireNextList(): void {
     YousubsCommand.execute("list-emails", this.session.user.id, this.session.user.password, "-m", this.session.user.client)
       .then((output) => {
@@ -125,3 +138,11 @@ iohook.registerShortcut([29, 56, 82], () => {
 });
 
 iohook.start();
+
+// Check every 5 seconds for IDLE and stop the player if
+// max is reached.
+setInterval(() => {
+  if (desktopIdle.getIdleTime() * 1000 > MAX_IDLE_TIME) {
+    YousubsSocket.pauseAll();
+  }
+}, 1000 * 5);

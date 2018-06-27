@@ -8,6 +8,7 @@ var likesContainer;
 var nextTrackButton = document.getElementById("next_video");
 var forwardButton = document.getElementById("forward");
 var likeButton = document.getElementById("like");
+var idlePause = document.getElementById("idle_pause");
 
 likesContainer = document.getElementById("likes");
 historyContainer = document.getElementById("history");
@@ -123,6 +124,11 @@ socket.on("forward", function () {
 });
 socket.on("like", function () {
   addToLike(currentTrack);
+});
+socket.on("pause", function () {
+  if (player && idlePause.checked) {
+    player.pauseVideo();
+  }
 });
 
 socket.on("likes", (likesArr) => {
