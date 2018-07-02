@@ -34,6 +34,10 @@ export default class YoutubeMessage {
     return this;
   }
 
+  public getVideoId(): string {
+    return this.videoId;
+  }
+
   public getTitle(): string {
     return this.title;
   }

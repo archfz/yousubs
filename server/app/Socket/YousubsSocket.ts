@@ -115,7 +115,14 @@ export default class YousubsSocket {
   protected acquireNextList(): void {
     YousubsCommand.execute("list-emails", this.session.user.id, this.session.user.password, "-m", this.session.user.client)
       .then((output) => {
-        this.musicList = JSON.parse(output);
+        try {
+          this.musicList = JSON.parse(output);
+        } catch (e) {
+          console.log("Failed parsing json: ");
+          console.log(output);
+          throw e;
+        }
+
         this.atTrack = -1;
         this.setNext();
       })

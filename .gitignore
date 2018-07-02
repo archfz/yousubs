@@ -1,7 +1,7 @@
 server/app/**/*.js
 server/app/**/*.js.map
-server/cli/**/*.js
-server/cli/**/*.js.map
+cli/**/*.js
+cli/**/*.js.map
 
 node_modules
 

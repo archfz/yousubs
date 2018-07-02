@@ -1,4 +1,10 @@
-import * as process from "child_process";
+import * as nProcess from "child_process";
+
+let CLI: string = "yousubs-cli";
+
+if (process.env.YS_DEV) {
+  CLI = "node ./cli/index.js";
+}
 
 export default class YousubsCommand {
 
@@ -14,7 +20,7 @@ export default class YousubsCommand {
     }).join(" ");
 
     return new Promise<string>((resolve: any, reject: any) => {
-      process.exec("yousubs-cli " + command, (err: any, stdout: any, stderr: any) => {
+      nProcess.exec(CLI + " " + command, (err: any, stdout: any, stderr: any) => {
         if (err) {
           reject(stderr);
         } else {

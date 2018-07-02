@@ -61,6 +61,9 @@ export default class Cli {
           .list(options[TOptions.BEFORE_EMAIL]);
       })
       .then((messages: YoutubeMessage[]) => {
+        // Send only messages that have video.
+        messages = messages.filter((m) => m.getVideoId());
+
         return JSON.stringify(messages);
       });
   }

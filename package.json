@@ -12,7 +12,7 @@
     "build": "tsc && gulp",
     "develop": "tsc --watch",
     "lint": "tslint --project ./",
-    "start": "npm run build && node start.js",
+    "start": "npm run build && (YS_DEV=1 node start.js)",
     "postinstall": "npm run build"
   },
   "keywords": [

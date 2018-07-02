@@ -55,6 +55,7 @@ let Cli = class Cli {
                 .list(options[TOptions_1.TOptions.BEFORE_EMAIL]);
         })
             .then((messages) => {
+            messages = messages.filter((m) => m.getVideoId());
             return JSON.stringify(messages);
         });
     }
