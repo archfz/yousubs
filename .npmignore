@@ -1,0 +1,10 @@
+server/app/**/*.ts
+server/app/**/*.js.map
+cli/**/*.ts
+cli/**/*.js.map
+
+server/resource
+
+.idea
+tsconfig.json
+tslint.json
