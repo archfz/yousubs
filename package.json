@@ -1,6 +1,6 @@
 {
   "name": "yousubs",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Script that plays your youtube subsription emails. (gmail)",
   "main": "start.js",
   "bin": {
