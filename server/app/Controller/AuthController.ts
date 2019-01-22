@@ -95,6 +95,17 @@ export class AuthController extends BaseController {
           return;
         }
 
+        if (output.indexOf("AUTH_FAIL") !== -1) {
+          this.render(req, res, "pages/login", {
+            input: {id},
+            errors: {
+              misc: `Invalid login credentials.`
+            }
+          });
+
+          return;
+        }
+
         throw output;
       })
       .catch(console.error);
