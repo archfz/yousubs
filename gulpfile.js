@@ -2,7 +2,6 @@ const gulp = require('gulp');
 const sass = require('gulp-sass');
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
-const gutil = require('gulp-util');
 
 const sassPath = 'server/resource/sass/**/*.scss';
 const jsPath = 'server/resource/js/**/*.js';
@@ -22,11 +21,11 @@ gulp.task('sass', function(){
 
 // Task to concat, strip debugging and minify JS files
 gulp.task('scripts', function() {
-  gulp.src(jsPath)
+  return gulp.src(jsPath)
     .pipe(concat('main.js'))
     // .pipe(uglify())
-    .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
+    .on('error', function (err) { err.toString() })
     .pipe(gulp.dest('public/asset/js/'));
 });
 
-gulp.task('default', ['scripts', 'sass']);
+gulp.task('default', gulp.series(['scripts', 'sass']));

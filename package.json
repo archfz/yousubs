@@ -1,6 +1,6 @@
 {
   "name": "yousubs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Script that plays your youtube subsription emails. (gmail)",
   "main": "start.js",
   "bin": {
@@ -43,13 +43,13 @@
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "googleapis": "^27.0.0",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-sass": "^4.0.1",
     "gulp-uglify": "^3.0.0",
     "iohook": "^0.3.1",
     "method-override": "^2.3.10",
-    "morgan": "^1.9.0",
+    "morgan": "^1.9.1",
     "opn": "^5.3.0",
     "pug": "^2.0.3",
     "reflect-metadata": "^0.1.12",
