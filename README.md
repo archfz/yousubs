@@ -10,23 +10,26 @@ a setup and global shortcuts. Best suited for music.
 - [Benefits](#benefits)
 - [Usage](#usage)
 
+
+## Features
+
+- Loads and plays youtube emails from your mail account.
+- Cleans emails that you listened to.
+- Adds global shortcuts for liking, skipping and forwarding so you 
+can play or do other things meanwhile listening.
+- Keeps history of played tracks.
+- Skips tracks that have been removed.
+- Optional IDLE pause so that you don't miss any tracks.
+
 ![demo](./misc/demo.png)
 
 ## Installation
 
-xserver-xorg-dev libxext-dev libxss-dev xscreensaver
+0. The following packages are required on linux: 
+`xserver-xorg-dev libxext-dev libxss-dev xscreensaver`
 
 1. Install node if you don't already have it [https://nodejs.org/en/](https://nodejs.org/en/)
 2. Install yousubs by running in a shell ``npm install -g yousubs``
-
-## Benefits
-
-- Loads and plays youtube emails from your mail account.
-- Cleans emails that you listened to.
-- Adds global shortcuts for liking, skipping and forwarding.
-- Is usable while doing other tasks, like gaming.
-- Keeps history of played tracks.
-- Optional IDLE pause so that you don't miss any tracks.
 
 ## Usage
 

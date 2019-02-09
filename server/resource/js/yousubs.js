@@ -22,6 +22,7 @@ function onYouTubeIframeAPIReady() {
     height: '390',
     videoId: currentTrack && currentTrack.videoId,
     events: {
+      onError: onPlayerError,
       onReady: onPlayerReady,
       onStateChange: onPlayerStateChange
     }
@@ -49,6 +50,17 @@ function onPlayerStateChange(event) {
   }
 }
 
+function onPlayerError(error) {
+  if (
+    (currentTrack && currentTrack.videoId) &&
+    (error.data === 100 ||
+    error.data === 101 ||
+    error.data === 150)
+  ) {
+    next(true);
+  }
+}
+
 function addToHistory(track, save) {
   save = save === undefined ? true : save;
   for (var i = 0; i < videoHistory.length; ++i) {
@@ -62,9 +74,10 @@ function addToHistory(track, save) {
   var intId = setInterval( function() {
     if ( [ 1, 2, 5 ].indexOf( player.getPlayerState() ) >= 0 ) {
       if (player.getVideoData().title) {
+        clearInterval(intId);
+
         track.title = player.getVideoData().title;
         save && socket.emit("save history", track);
-        clearInterval(intId);
         insertHistory(track);
       }
     }
@@ -116,6 +129,12 @@ function forward() {
   }
 }
 
+function next(force) {
+  if ( force || [ 1, 2, 5 ].indexOf( player.getPlayerState() ) >= 0 ) {
+    socket.emit("set next");
+  }
+}
+
 socket.on("set next", function (track) {
   setYoutubeVideo(track);
 });
@@ -141,7 +160,7 @@ socket.on("history", (history) => {
 });
 
 nextTrackButton.addEventListener("click", function (event) {
-  socket.emit("set next");
+  next();
 });
 
 forwardButton.addEventListener("click", function (event) {
