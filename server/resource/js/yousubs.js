@@ -130,7 +130,9 @@ socket.on("pause", function () {
     player.pauseVideo();
   }
 });
-
+socket.on("loggedout", function () {
+  location.reload();
+});
 socket.on("likes", (likesArr) => {
   likesArr.forEach((like) => likes.push(like) && insertLike(like));
 });

@@ -1,4 +1,5 @@
 import YousubsCommand from "../Util/YousubsCommand";
+import ListenHistoryRepository from "../Repository/ListenHistoryRepository";
 const iohook = require("iohook");
 const desktopIdle = require("desktop-idle");
 
@@ -38,14 +39,13 @@ export default class YousubsSocket {
     });
   }
 
-  protected static history: any[] = [];
-  protected static likes: any[] = [];
   protected static openSockets: YousubsSocket[] = [];
 
   protected socket: any;
   protected session: any;
   protected musicList: any = [];
   protected atTrack: number = -1;
+  protected listenRepo: ListenHistoryRepository;
 
   constructor(socket: any) {
     this.socket = socket;
@@ -59,8 +59,12 @@ export default class YousubsSocket {
       socket.on("save history", this.saveHistory.bind(this));
       socket.on("save like", this.saveLike.bind(this));
 
-      socket.emit("history", YousubsSocket.history);
-      socket.emit("likes", YousubsSocket.likes);
+      this.listenRepo = new ListenHistoryRepository(this.session.user.id);
+      this.session.user.history = this.listenRepo.getHistory();
+      this.session.user.likes = this.listenRepo.getLikes();
+
+      socket.emit("history", this.session.user.history);
+      socket.emit("likes", this.session.user.likes);
 
       YousubsSocket.openSockets.push(this);
     } else {
@@ -73,6 +77,8 @@ export default class YousubsSocket {
   }
 
   public setNext(): void {
+    this.session.touch();
+
     const lastTrack: number = this.atTrack;
     ++this.atTrack;
 
@@ -89,14 +95,16 @@ export default class YousubsSocket {
   }
 
   public saveLike(like: any) {
-    if (!YousubsSocket.likes.find((l) => l.videoId === like.videoId)) {
-      YousubsSocket.likes.push(like);
+    if (!this.session.user.likes.find((l: any) => l.videoId === like.videoId)) {
+      this.session.user.likes.push(like);
+      this.listenRepo.saveLikes(this.session.user.likes);
     }
   }
 
   public saveHistory(history: any) {
-    if (!YousubsSocket.likes.find((l) => l.videoId === history.videoId)) {
-      YousubsSocket.history.push(history);
+    if (!this.session.user.history.find((l: any) => l.videoId === history.videoId)) {
+      this.session.user.history.push(history);
+      this.listenRepo.saveHistory(this.session.user.history);
     }
   }
 
@@ -113,6 +121,10 @@ export default class YousubsSocket {
   }
 
   protected acquireNextList(): void {
+    if (!this.session.user) {
+      this.socket.emit("loggedout");
+    }
+
     YousubsCommand.execute("list-emails", this.session.user.id, this.session.user.password, "-m", this.session.user.client)
       .then((output) => {
         try {
