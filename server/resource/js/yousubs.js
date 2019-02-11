@@ -9,6 +9,7 @@ var nextTrackButton = document.getElementById("next_video");
 var forwardButton = document.getElementById("forward");
 var likeButton = document.getElementById("like");
 var idlePause = document.getElementById("idle_pause");
+var videoName = document.getElementById("video_name");
 
 likesContainer = document.getElementById("likes");
 historyContainer = document.getElementById("history");
@@ -32,9 +33,18 @@ function onYouTubeIframeAPIReady() {
 
 function setYoutubeVideo(track) {
   currentTrack = track;
+  videoName.innerHTML = "...";
+
   if (player) {
-    addToHistory(currentTrack);
     player.loadVideoById(track.videoId);
+    addToHistory(currentTrack);
+
+    var intId = setInterval( function() {
+      if (player.getVideoData().title) {
+        clearInterval(intId);
+        videoName.innerHTML = player.getVideoData().title;
+      }
+    });
   }
 }
 

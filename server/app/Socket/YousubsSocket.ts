@@ -80,7 +80,7 @@ export default class YousubsSocket {
     this.session.touch();
 
     const lastTrack: number = this.atTrack;
-    let promise = Promise.resolve();
+    let promise: any = Promise.resolve();
 
     if (this.musicList[lastTrack]) {
       promise = YousubsCommand.execute("remove-email", this.session.user.id, this.session.user.password, this.musicList[lastTrack].id, "-m", this.session.user.client)
