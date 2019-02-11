@@ -80,18 +80,21 @@ export default class YousubsSocket {
     this.session.touch();
 
     const lastTrack: number = this.atTrack;
-    ++this.atTrack;
+    let promise = Promise.resolve();
 
-    if (lastTrack > -1) {
-      YousubsCommand.execute("remove-email", this.session.user.id, this.session.user.password, this.musicList[lastTrack].id, "-m", this.session.user.client)
-        .catch(console.error);
+    if (this.musicList[lastTrack]) {
+      promise = YousubsCommand.execute("remove-email", this.session.user.id, this.session.user.password, this.musicList[lastTrack].id, "-m", this.session.user.client)
     }
 
-    if (this.atTrack >= this.musicList.length) {
-      return this.acquireNextList();
-    }
+    promise.then(() => {
+      ++this.atTrack;
+      if (this.atTrack >= this.musicList.length) {
+        return this.acquireNextList();
+      }
 
-    this.socket.emit("set next", this.musicList[this.atTrack]);
+      this.socket.emit("set next", this.musicList[this.atTrack]);
+    })
+      .catch(console.error);
   }
 
   public saveLike(like: any) {
