@@ -1,10 +1,23 @@
+.animation {
+  animation: player 4s infinite;
+  position: absolute;
+  top: 0;
+  max-width: 640px;
+  display: block;
+  height: 500px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: -1;
+}
+
 .player {
   max-width: 640px;
   margin: auto;
   background: #000000;
   border-radius: 5px;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
-  animation: player 4s infinite;
 
   iframe {
     margin: 0;

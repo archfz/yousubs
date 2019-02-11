@@ -79,20 +79,19 @@ export default class YousubsSocket {
   public setNext(): void {
     this.session.touch();
 
-    const lastTrack: number = this.atTrack;
-    let promise: any = Promise.resolve();
+    const lastTrack: any = this.musicList[this.atTrack];
 
-    if (this.musicList[lastTrack]) {
-      promise = YousubsCommand.execute("remove-email", this.session.user.id, this.session.user.password, this.musicList[lastTrack].id, "-m", this.session.user.client)
-    }
-
-    promise.then(() => {
+    Promise.resolve().then(() => {
       ++this.atTrack;
       if (this.atTrack >= this.musicList.length) {
-        return this.acquireNextList();
+        this.acquireNextList();
+      } else {
+        this.socket.emit("set next", this.musicList[this.atTrack]);
       }
 
-      this.socket.emit("set next", this.musicList[this.atTrack]);
+      if (lastTrack) {
+        return YousubsCommand.execute("remove-email", this.session.user.id, this.session.user.password, lastTrack.id, "-m", this.session.user.client)
+      }
     })
       .catch(console.error);
   }
