@@ -12,7 +12,7 @@ const handle = (callback) => {
     return (...args) => {
         return callback(...args)
             .then((output) => output && console.log(output))
-            .catch((err) => console.error(err) && process.exit(1));
+            .catch((err) => { console.error(err); process.exit(1); });
     };
 };
 program

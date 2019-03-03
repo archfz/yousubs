@@ -61,9 +61,34 @@ button {
   cursor: pointer;
   margin-top: 10px;
   transition: background 0.1s;
+  position: relative;
 
   &:hover {
     background: #25323d;
     border: 1px solid #4b6472;
+  }
+
+  &.loader:after {
+    content: '';
+    display: block;
+    left: 0; top: 0;
+    position: absolute;
+    width: 0;
+    height: 100%;
+    $fromColor: rgba(12, 222, 162, 0.16);
+    $toColor: rgba(12, 222, 162, 0.36);
+    background: linear-gradient(10deg, $fromColor, $toColor);
+    animation: loader-anim 1.5s infinite;
+  }
+  
+  @keyframes loader-anim {
+    0% {
+      width: 0;
+      opacity: 1;
+    }
+    100% {
+      width: 100%;
+      opacity: 0;
+    }
   }
 }

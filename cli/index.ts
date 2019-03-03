@@ -12,7 +12,7 @@ const handle = (callback: (...args: any[]) => Promise<string>) => {
   return (...args: any[]) => {
     return callback(...args)
       .then((output: string) => output && console.log(output))
-      .catch((err: any) => console.error(err) && process.exit(1));
+      .catch((err: any) => {console.error(err); process.exit(1)});
   };
 };
 

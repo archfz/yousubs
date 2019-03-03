@@ -1,6 +1,6 @@
 {
   "name": "yousubs",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "Script that plays your youtube subsription emails. (gmail)",
   "main": "start.js",
   "bin": {
@@ -13,6 +13,7 @@
     "develop": "tsc --watch",
     "lint": "tslint --project ./",
     "start": "npm run build && (YS_DEV=1 node start.js)",
+    "start-win": "npm run build && (node start.js)",
     "deploy": "npm run build && npm publish"
   },
   "keywords": [

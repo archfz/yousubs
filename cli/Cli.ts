@@ -4,6 +4,7 @@ import YoutubeMessageRepositoryFactory from "./Factory/YoutubeMessageRepositoryF
 import {TOptions} from "./Type/TOptions";
 import YoutubeMessage from "./Model/YoutubeMessage";
 import IYoutubeMessageRepository from "./Repository/IYoutubeMessageRepository";
+import {Defaults} from "./Enum/Defaults";
 
 @Service()
 export default class Cli {
@@ -57,16 +58,34 @@ export default class Cli {
     return this.clientFactory.create(options[TOptions.MAIL_CLIENT])
       .connect(id, password)
       .then((auth) => {
-        return this.messageRepoFactory.create(options[TOptions.MAIL_CLIENT], auth)
-          .list(options[TOptions.BEFORE_EMAIL]);
+        const repo = this.messageRepoFactory.create(options[TOptions.MAIL_CLIENT], auth);
+        return this.doListEmails(repo, options);
       })
       .then((messages: YoutubeMessage[]) => {
-        // Send only messages that have video.
-        messages = messages.filter((m) => m.getVideoId());
-
         return JSON.stringify(messages);
       });
   }
+
+  protected doListEmails(repo: IYoutubeMessageRepository, options: any, max: number = Defaults.MAX_LIST_EMAILS): Promise<YoutubeMessage[]> {
+    return repo.list(options[TOptions.BEFORE_EMAIL], max)
+      .then((messages) => {
+        // Send only messages that have video.
+        const goodMessages = messages.filter((m) => m.getVideoId());
+
+        if (goodMessages.length >= max) {
+          return messages;
+        }
+
+        const promises = messages.filter((m) => !m.getVideoId())
+          .map((m) => repo.remove(m));
+        return Promise.all(promises)
+          .then(() => {
+            return this.doListEmails(repo, options, max - goodMessages.length)
+              .then((additionMessages) => goodMessages.concat(additionMessages));
+          })
+      });
+  }
+
 
   public removeEmail(id: string, password: string, emailIds: string, options: any): Promise<string> {
     return this.clientFactory.create(options[TOptions.MAIL_CLIENT])

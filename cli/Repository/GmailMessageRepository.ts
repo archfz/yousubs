@@ -5,6 +5,7 @@ import GmailMessageToYoutubeMessageTransformer from "../Transformer/GmailMessage
 import IContainerInjection from "../Container/IContainerInjection";
 import {Mixin} from "../Utils/Mixin";
 import {Container} from "typedi";
+import {Defaults} from "../Enum/Defaults";
 
 @Mixin([IContainerInjection])
 export default class GmailMessageRepository implements IYoutubeMessageRepository, IContainerInjection {
@@ -47,7 +48,7 @@ export default class GmailMessageRepository implements IYoutubeMessageRepository
       });
   }
 
-  public list(after: YoutubeMessage = null, max: number = 20): Promise<YoutubeMessage[]> {
+  public list(after: YoutubeMessage = null, max: number = Defaults.MAX_LIST_EMAILS): Promise<YoutubeMessage[]> {
     const query: any = {
       maxResults: max,
       q: `from:${(this.constructor as any).YOUTUBE_EMAIL}`,

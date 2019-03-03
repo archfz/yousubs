@@ -14,6 +14,7 @@ const ClientFactory_1 = require("./Factory/ClientFactory");
 const YoutubeMessageRepositoryFactory_1 = require("./Factory/YoutubeMessageRepositoryFactory");
 const TOptions_1 = require("./Type/TOptions");
 const YoutubeMessage_1 = require("./Model/YoutubeMessage");
+const Defaults_1 = require("./Enum/Defaults");
 let Cli = class Cli {
     listAuths(options) {
         return this.clientFactory.create(options[TOptions_1.TOptions.MAIL_CLIENT])
@@ -51,12 +52,27 @@ let Cli = class Cli {
         return this.clientFactory.create(options[TOptions_1.TOptions.MAIL_CLIENT])
             .connect(id, password)
             .then((auth) => {
-            return this.messageRepoFactory.create(options[TOptions_1.TOptions.MAIL_CLIENT], auth)
-                .list(options[TOptions_1.TOptions.BEFORE_EMAIL]);
+            const repo = this.messageRepoFactory.create(options[TOptions_1.TOptions.MAIL_CLIENT], auth);
+            return this.doListEmails(repo, options);
         })
             .then((messages) => {
-            messages = messages.filter((m) => m.getVideoId());
             return JSON.stringify(messages);
+        });
+    }
+    doListEmails(repo, options, max = Defaults_1.Defaults.MAX_LIST_EMAILS) {
+        return repo.list(options[TOptions_1.TOptions.BEFORE_EMAIL], max)
+            .then((messages) => {
+            const goodMessages = messages.filter((m) => m.getVideoId());
+            if (goodMessages.length >= max) {
+                return messages;
+            }
+            const promises = messages.filter((m) => !m.getVideoId())
+                .map((m) => repo.remove(m));
+            return Promise.all(promises)
+                .then(() => {
+                return this.doListEmails(repo, options, max - goodMessages.length)
+                    .then((additionMessages) => goodMessages.concat(additionMessages));
+            });
         });
     }
     removeEmail(id, password, emailIds, options) {

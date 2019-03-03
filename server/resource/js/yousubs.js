@@ -31,16 +31,23 @@ function onYouTubeIframeAPIReady() {
 }
 
 
-function setYoutubeVideo(track) {
+function setYoutubeTrack(track) {
   currentTrack = track;
   videoName.innerHTML = "...";
 
   if (player) {
-    player.loadVideoById(track.videoId);
     addToHistory(currentTrack);
+    setYoutubeVideo(track.videoId);
+  }
+}
+
+function setYoutubeVideo(videoId) {
+  if (player) {
+    player.loadVideoById(videoId);
 
     var intId = setInterval( function() {
       if (player.getVideoData().title) {
+        nextTrackButton.classList.remove("loader");
         clearInterval(intId);
         videoName.innerHTML = player.getVideoData().title;
       }
@@ -97,8 +104,7 @@ function addToHistory(track, save) {
 function insertHistory(track) {
   var id = videoHistory.length;
   var row = document.createElement("div");
-  row.innerHTML = "<span>#" + id+ "</span> <a target='_blank' href=\"https://www.youtube.com/watch?v="
-    + track.videoId + "\">" + (track.title) + "</a>";
+  row.innerHTML = "<span>#" + id+ "</span> <a onclick='setYoutubeVideo(\"" + track.videoId + "\")'>" + (track.title) + "</a>";
   historyContainer.insertBefore(row, historyContainer.childNodes[0]);
 }
 
@@ -128,8 +134,7 @@ function addToLike(track, save) {
 function insertLike(track) {
   var id = likes.length;
   var row = document.createElement("div");
-  row.innerHTML = "<span>#" + id+ "</span> <a target='_blank' href=\"https://www.youtube.com/watch?v="
-    + track.videoId + "\">" + (track.title) + "</a>";
+  row.innerHTML = "<span>#" + id+ "</span> <a onclick='setYoutubeVideo(\"" + track.videoId + "\")'>" + (track.title) + "</a>";
   likesContainer.insertBefore(row, likesContainer.childNodes[0]);
 }
 
@@ -146,7 +151,8 @@ function next(force) {
 }
 
 socket.on("set next", function (track) {
-  setYoutubeVideo(track);
+  nextTrackButton.classList.add("loader");
+  setYoutubeTrack(track);
 });
 socket.on("forward", function () {
   forward();

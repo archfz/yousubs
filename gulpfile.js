@@ -7,8 +7,8 @@ const sassPath = 'server/resource/sass/**/*.scss';
 const jsPath = 'server/resource/js/**/*.js';
 
 gulp.task('watch', function(){
-  gulp.watch(sassPath, ['sass']);
-  gulp.watch(jsPath, ['scripts']);
+  gulp.watch(sassPath, gulp.series(['sass']));
+  gulp.watch(jsPath, gulp.series(['scripts']));
   // Other watchers
 });
 
