@@ -9,6 +9,7 @@ a setup and global shortcuts. Best suited for music.
 - [Installation](#Installation)
 - [Benefits](#benefits)
 - [Usage](#usage)
+- [How it works](#how-it-works)
 
 
 ## Features
@@ -21,7 +22,7 @@ can play or do other things meanwhile listening.
 - Skips tracks that have been removed.
 - Optional IDLE pause so that you don't miss any tracks.
 
-![demo](./misc/demo.png)
+![demo](https://raw.githubusercontent.com/archfz/yousubs/master/misc/demo.png)
 
 ## Installation
 
@@ -36,3 +37,16 @@ can play or do other things meanwhile listening.
 1. Open a shell and run ``yousubs``. This will start a server
 and open the application in your primary browser.
 2. Create an account on the opened page, login and enjoy.
+
+## How it works
+
+This package comes with two parts: an application for hosting a website locally on your computer
+and a command line tool that connects to your gmail client to fetch emails for youtube. The website
+manages the storage and login for your account. On the main page it uses sockets to seamlessly
+communicate with the backend and bring in the next song to play. A special global keypress watch is
+also started when the server starts and the socket is created, so that you can skip, like or 
+forward easily from anywhere.
+
+All history and likes of songs are stored globally on you computer and they persist indefinitely.
+This tool requires API access to your gmail account. The provided API token is stored securely by
+encrypting it with the password that you provided on registration.
