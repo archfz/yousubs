@@ -151,7 +151,6 @@ function next(force) {
 }
 
 socket.on("set next", function (track) {
-  nextTrackButton.classList.add("loader");
   setYoutubeTrack(track);
 });
 socket.on("forward", function () {
@@ -176,6 +175,7 @@ socket.on("history", (history) => {
 });
 
 nextTrackButton.addEventListener("click", function (event) {
+  nextTrackButton.classList.add("loader");
   next();
 });
 

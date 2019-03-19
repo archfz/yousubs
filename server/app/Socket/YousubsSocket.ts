@@ -77,7 +77,10 @@ export default class YousubsSocket {
   }
 
   public setNext(): void {
-    this.session.touch();
+    if (!this.session.user) {
+      this.socket.emit("loggedout");
+      return;
+    }
 
     const lastTrack: any = this.musicList[this.atTrack];
 
@@ -97,6 +100,11 @@ export default class YousubsSocket {
   }
 
   public saveLike(like: any) {
+    if (!this.session.user) {
+      this.socket.emit("loggedout");
+      return;
+    }
+
     if (!this.session.user.likes.find((l: any) => l.videoId === like.videoId)) {
       this.session.user.likes.push(like);
       this.listenRepo.saveLikes(this.session.user.likes);
@@ -104,6 +112,11 @@ export default class YousubsSocket {
   }
 
   public saveHistory(history: any) {
+    if (!this.session.user) {
+      this.socket.emit("loggedout");
+      return;
+    }
+
     if (!this.session.user.history.find((l: any) => l.videoId === history.videoId)) {
       this.session.user.history.push(history);
       this.listenRepo.saveHistory(this.session.user.history);
@@ -123,10 +136,6 @@ export default class YousubsSocket {
   }
 
   protected acquireNextList(): void {
-    if (!this.session.user) {
-      this.socket.emit("loggedout");
-    }
-
     YousubsCommand.execute("list-emails", this.session.user.id, this.session.user.password, "-m", this.session.user.client)
       .then((output) => {
         try {
