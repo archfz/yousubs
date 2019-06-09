@@ -60,7 +60,16 @@ export default class GmailMessageRepository implements IYoutubeMessageRepository
 
     return this.connection.getMessages(query)
       .then(({messages}: {messages: any[]}) => {
-        return Promise.all(messages.map((message: any) => this.get(message.id)));
+        return Promise.all(messages.map((message: any) => {
+          return this.get(message.id)
+            .catch((error) => {
+              if (error.code === "MAIL-NOT-FOUND") {
+                return null;
+              } else {
+                throw error;
+              }
+            })
+        }).filter((message) => !!message));
       });
   }
 

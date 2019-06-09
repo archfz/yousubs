@@ -1,5 +1,6 @@
 import IConnection from "./IConnection";
 import {google} from "googleapis";
+import MailNotFoundError from "../Error/MailNotFoundError";
 
 export default class GmailConnection implements IConnection {
 
@@ -48,7 +49,11 @@ export default class GmailConnection implements IConnection {
         ...query,
       }, (err: any, resp: any) => {
         if (err) {
-          reject(err);
+          if (err.code === "404") {
+            reject(new MailNotFoundError(`Mail not found with id '${id}'`));
+          } else {
+            reject(err);
+          }
         }
 
         resolve(resp.data);

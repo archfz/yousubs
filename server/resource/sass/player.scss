@@ -64,6 +64,10 @@
       font-size: 17px;
       padding: 10px 10px;
       margin: auto;
+
+      &.liked {
+        background: #202d36;
+      }
     }
 
     .shortcut {

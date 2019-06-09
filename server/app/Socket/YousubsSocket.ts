@@ -49,15 +49,17 @@ export default class YousubsSocket {
 
   constructor(socket: any) {
     this.socket = socket;
-    this.session = socket.handshake.session;
+    this.session = socket.request.session;
 
     socket.on("disconnect", () => YousubsSocket.remove(this));
+    setInterval(() => this.checkSession(), this.session.cookie.maxAge);
 
     if (this.session.user) {
       this.acquireNextList();
       socket.on("set next", this.setNext.bind(this));
       socket.on("save history", this.saveHistory.bind(this));
       socket.on("save like", this.saveLike.bind(this));
+      socket.on("remove like", this.removeLike.bind(this));
 
       this.listenRepo = new ListenHistoryRepository(this.session.user.id);
       this.session.user.history = this.listenRepo.getHistory();
@@ -70,6 +72,12 @@ export default class YousubsSocket {
     } else {
       console.error("Socket io initialized without session.");
     }
+  }
+
+  protected checkSession() {
+    this.session.regenerate(  () => {
+      this.socket.emit('loggedout', { timeout: 'true' });
+    });
   }
 
   public getSocket() {
@@ -107,6 +115,19 @@ export default class YousubsSocket {
 
     if (!this.session.user.likes.find((l: any) => l.videoId === like.videoId)) {
       this.session.user.likes.push(like);
+      this.listenRepo.saveLikes(this.session.user.likes);
+    }
+  }
+
+  public removeLike(like: any) {
+    if (!this.session.user) {
+      this.socket.emit("loggedout");
+      return;
+    }
+
+    const index = this.session.user.likes.findIndex((l: any) => l.videoId === like.videoId);
+    if (index) {
+      this.session.user.likes.splice(index, 1);
       this.listenRepo.saveLikes(this.session.user.likes);
     }
   }

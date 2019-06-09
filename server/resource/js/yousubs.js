@@ -35,6 +35,8 @@ function setYoutubeTrack(track) {
   currentTrack = track;
   videoName.innerHTML = "...";
 
+  updateLikeStatus(track);
+
   if (player) {
     addToHistory(currentTrack);
     setYoutubeVideo(track.videoId);
@@ -108,14 +110,28 @@ function insertHistory(track) {
   historyContainer.insertBefore(row, historyContainer.childNodes[0]);
 }
 
-function addToLike(track, save) {
-  save = save === undefined ? true : save;
+function hasLike(track) {
   for (var i = 0; i < likes.length; ++i) {
     if (likes[i].videoId === track.videoId) {
-      return;
+      return true;
     }
   }
+  return false;
+}
 
+function updateLikeStatus(track) {
+  if (hasLike(track) && !likeButton.classList.contains("liked")) {
+    likeButton.classList.add("liked");
+  } else if (!hasLike(track) && likeButton.classList.contains("liked")) {
+    likeButton.classList.remove("liked")
+  }
+}
+
+function addToLike(track, save) {
+  save = save === undefined ? true : save;
+  if (hasLike(track)) {
+    return
+  }
   likes.push(track);
   var id = likes.length;
 
@@ -131,11 +147,34 @@ function addToLike(track, save) {
   }, 100 );
 }
 
+function removeLike(track) {
+  if (!hasLike(track)) {
+    return
+  }
+
+  socket.emit("remove like", track);
+  for (var i = 0; i < likes.length; ++i) {
+    if (likes[i].videoId === track.videoId) {
+      break;
+    }
+  }
+  likes.splice(i, 1);
+  removeLikeElement(track);
+}
+
 function insertLike(track) {
   var id = likes.length;
   var row = document.createElement("div");
+  row.id = "like" + track.videoId;
   row.innerHTML = "<span>#" + id+ "</span> <a onclick='setYoutubeVideo(\"" + track.videoId + "\")'>" + (track.title) + "</a>";
   likesContainer.insertBefore(row, likesContainer.childNodes[0]);
+  updateLikeStatus(track);
+}
+
+function removeLikeElement(track) {
+  var element = document.getElementById("like" + track.videoId);
+  element.parentNode.removeChild(element);
+  updateLikeStatus(track);
 }
 
 function forward() {
@@ -184,5 +223,9 @@ forwardButton.addEventListener("click", function (event) {
 });
 
 likeButton.addEventListener("click", function (event) {
-  addToLike(currentTrack);
+  if (hasLike(currentTrack)) {
+    removeLike(currentTrack);
+  } else {
+    addToLike(currentTrack);
+  }
 });
