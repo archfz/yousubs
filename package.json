@@ -1,7 +1,7 @@
 {
   "name": "yousubs",
-  "version": "1.1.7",
-  "description": "Script that plays your youtube subsription emails. (gmail)",
+  "version": "1.3.0",
+  "description": "Local website that plays your youtube subscription emails. (gmail)",
   "repository": "https://github.com/archfz/yousubs",
   "main": "start.js",
   "bin": {
@@ -10,8 +10,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc && gulp",
-    "develop": "tsc --watch",
+    "build": "tsc -p ./ && gulp",
+    "develop": "tsc -p ./ --watch",
     "lint": "tslint --project ./",
     "start": "npm run build && (YS_DEV=1 node start.js)",
     "start-win": "npm run build && (node start.js)",
@@ -19,13 +19,20 @@
   },
   "keywords": [
     "youtube",
+    "music",
     "player",
     "gmail",
+    "email",
     "subscription",
     "controls",
-    "easy"
+    "easy",
+    "like",
+    "track",
+    "history",
+    "channels",
+    "list"
   ],
-  "author": "Fodor Zoltan",
+  "author": "Fodor Zoltan (archfz)",
   "license": "GPL-2.0",
   "dependencies": {
     "@types/cookie-parser": "^1.4.1",
@@ -36,6 +43,7 @@
     "@types/method-override": "0.0.31",
     "@types/morgan": "^1.7.35",
     "@types/node": "^10.3.2",
+    "axios": "^0.19.0",
     "commander": "^2.15.1",
     "configstore": "^3.1.2",
     "cookie-parser": "^1.4.3",
@@ -44,7 +52,8 @@
     "errorhandler": "^1.5.0",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
-    "googleapis": "^27.0.0",
+    "get-port": "^5.0.0",
+    "googleapis": "^42.0.0",
     "gulp": "^4.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-sass": "^4.0.1",
@@ -59,6 +68,6 @@
     "socket.io": "^2.1.1",
     "tslint": "^5.10.0",
     "typedi": "^0.7.3",
-    "typescript": "^2.9.1"
+    "typescript": "3.4.5"
   }
 }

@@ -11,12 +11,14 @@
     "experimentalDecorators": true
   },
   "include": [
-    "cli/**/*",
-    "server/**/*.ts"
+    "./cli/**/*.ts",
+    "./server/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    "**/*.spec.ts"
+    "./node_modules/*",
+    "./**/*.spec.ts",
+    "node_modules/@types/node/",
+    "typings"
   ],
   "lib": ["dom", "es2017"]
 }

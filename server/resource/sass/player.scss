@@ -12,9 +12,19 @@
   z-index: -1;
 }
 
-.player {
-  max-width: 640px;
+.player-wrapper {
+  display: flex;
+  flex-direction: row;
+  max-width: 1200px;
   margin: auto;
+  height: 100%;
+  max-height: calc(100vh - 140px);
+  position: relative;
+}
+
+.player {
+  flex-grow: 1.5;
+  flex-basis: 0;
   background: #000000;
   border-radius: 5px;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
@@ -35,19 +45,7 @@
     font-size: 20px;
   }
 
-  .likes, .history {
-    padding: 5px 20px 20px;
 
-    > div {
-      padding: 4px 0;
-    }
-
-    span {
-      opacity: 0.6;
-      font-size: 13px;
-      font-weight: bold;
-    }
-  }
 
   #controls {
     display: table;
@@ -85,15 +83,85 @@
   }
 }
 
-@keyframes player {
-  0% {
-    box-shadow: 0 0 0px rgba(102, 110, 125, 0);
+//@keyframes player {
+//  0% {
+//    box-shadow: 0 0 0px rgba(102, 110, 125, 0);
+//  }
+//  50% {
+//    box-shadow: 0 0 20px 7px rgb(0, 0, 0),
+//      0 0 60px 15px rgba(102, 110, 125, 0.28);
+//  }
+//  100% {
+//    box-shadow: 0 0 0px rgba(102, 110, 125, 0);
+//  }
+//}
+
+.left-wing, .right-wing {
+  flex-grow: 1;
+  flex-basis: 0;
+  display: flex;
+  max-height: 100%;
+  overflow: hidden;
+  flex-direction: column;
+  transition: opacity 0.2s;
+  opacity: 0.4;
+
+  &:hover {
+    opacity: 1;
   }
-  50% {
-    box-shadow: 0 0 20px 7px rgb(0, 0, 0),
-      0 0 60px 15px rgba(102, 110, 125, 0.28);
+}
+
+$likesBackground: #040406;
+.content-list {
+  padding: 5px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: $likesBackground;
+  width: 100%;
+
+  > div {
+    height: calc(100% - 30px);
+
+    .simplebar-scrollbar {
+      &::before {
+        background: #2b334a;
+      }
+    }
   }
-  100% {
-    box-shadow: 0 0 0px rgba(102, 110, 125, 0);
+
+  &.history{
+    height: 60%;
   }
+  &.channels {
+    height: 40%;
+  }
+
+  .music-item {
+    padding: 4px 0;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    position: relative;
+
+    > * {
+      min-width: 0;
+      white-space: nowrap;
+    }
+
+    a {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      width: 100%;
+      padding-left: 5px;
+      position: relative;
+    }
+
+    span {
+      padding-top: 4px;
+      opacity: 0.6;
+      font-size: 12px;
+    }
+  }
+
 }

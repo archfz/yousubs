@@ -2,17 +2,15 @@ var socket = new io();
 var player;
 var currentTrack;
 
-var historyContainer;
-var likesContainer;
-
 var nextTrackButton = document.getElementById("next_video");
 var forwardButton = document.getElementById("forward");
 var likeButton = document.getElementById("like");
 var idlePause = document.getElementById("idle_pause");
 var videoName = document.getElementById("video_name");
 
-likesContainer = document.getElementById("likes");
-historyContainer = document.getElementById("history");
+var likesContainerScroll = new SimpleBar(document.getElementById("likes"));
+var historyContainerScroll = new SimpleBar(document.getElementById("history"));
+var channelsContainerScroll = new SimpleBar(document.getElementById("channels"));
 
 var videoHistory = [];
 var likes = [];
@@ -31,19 +29,31 @@ function onYouTubeIframeAPIReady() {
 }
 
 
-function setYoutubeTrack(track) {
+function nextYoutubeTrack(track) {
   currentTrack = track;
-  videoName.innerHTML = "...";
-
-  updateLikeStatus(track);
 
   if (player) {
-    addToHistory(currentTrack);
+    addToHistory(track);
     setYoutubeVideo(track.videoId);
   }
 }
 
+function setLikedVideo(videoId) {
+  var track = likes.find((l) => l.videoId === videoId);
+  currentTrack = track;
+  setYoutubeVideo(track.videoId);
+}
+
+function setHistoryVideo(videoId) {
+  var track = videoHistory.find((l) => l.videoId === videoId);
+  currentTrack = track;
+  setYoutubeVideo(track.videoId);
+}
+
 function setYoutubeVideo(videoId) {
+  updateLikeStatus(videoId);
+  videoName.innerHTML = "...";
+
   if (player) {
     player.loadVideoById(videoId);
 
@@ -106,13 +116,44 @@ function addToHistory(track, save) {
 function insertHistory(track) {
   var id = videoHistory.length;
   var row = document.createElement("div");
-  row.innerHTML = "<span>#" + id+ "</span> <a onclick='setYoutubeVideo(\"" + track.videoId + "\")'>" + (track.title) + "</a>";
-  historyContainer.insertBefore(row, historyContainer.childNodes[0]);
+  row.className = "music-item";
+  row.innerHTML = "<span>#" + id+ "</span> <a onclick='setHistoryVideo(\"" + track.videoId + "\")'>" + (track.title) + "</a>";
+  historyContainerScroll.getContentElement().insertBefore(row, historyContainerScroll.getContentElement().childNodes[0]);
+  historyContainerScroll.recalculate();
 }
+
+function setMostLikedChannels() {
+  var channels = {};
+  likes.forEach((like) => {
+    if (like.channelUser) {
+      if (channels[like.channelUser]) {
+        channels[like.channelUser]++
+      } else {
+        channels[like.channelUser] = 1;
+      }
+    }
+  });
+
+  var element = document.createElement('div');
+
+  Object.entries(channels)
+    .sort((a, b) => b[1] - a[1])
+    .forEach(([id, count]) => {
+      var row = document.createElement("div");
+      row.className = "music-item";
+      row.innerHTML = "<span>#" + count+ "</span> <a target='_blank' href='https://www.youtube.com/user/" + id + "'>" + (id) + "</a>";
+      element.appendChild(row);
+    });
+
+  channelsContainerScroll.getContentElement()
+    .innerHTML = element.innerHTML;
+  channelsContainerScroll.recalculate();
+}
+
 
 function hasLike(track) {
   for (var i = 0; i < likes.length; ++i) {
-    if (likes[i].videoId === track.videoId) {
+    if (likes[i].videoId === (typeof track === "string" ? track : track.videoId)) {
       return true;
     }
   }
@@ -132,8 +173,10 @@ function addToLike(track, save) {
   if (hasLike(track)) {
     return
   }
-  likes.push(track);
-  var id = likes.length;
+
+  if (!likeButton.classList.contains("loader")) {
+    likeButton.classList.add("loader");
+  }
 
   var intId = setInterval( function() {
     if ( [ 1, 2, 5 ].indexOf( player.getPlayerState() ) >= 0 ) {
@@ -141,7 +184,6 @@ function addToLike(track, save) {
         track.title = player.getVideoData().title;
         save && socket.emit("save like", track);
         clearInterval(intId);
-        insertLike(track);
       }
     }
   }, 100 );
@@ -166,15 +208,29 @@ function insertLike(track) {
   var id = likes.length;
   var row = document.createElement("div");
   row.id = "like" + track.videoId;
-  row.innerHTML = "<span>#" + id+ "</span> <a onclick='setYoutubeVideo(\"" + track.videoId + "\")'>" + (track.title) + "</a>";
-  likesContainer.insertBefore(row, likesContainer.childNodes[0]);
-  updateLikeStatus(track);
+  row.className = "music-item";
+  row.innerHTML = "<span>#" + id+ "</span> <a onclick='setLikedVideo(\"" + track.videoId + "\")'>" + (track.title) + "</a>";
+  likesContainerScroll.getContentElement().insertBefore(row, likesContainerScroll.getContentElement().childNodes[0]);
+  likesContainerScroll.recalculate();
+
+  setMostLikedChannels();
 }
 
 function removeLikeElement(track) {
   var element = document.getElementById("like" + track.videoId);
   element.parentNode.removeChild(element);
   updateLikeStatus(track);
+  likesContainerScroll.recalculate();
+
+  setMostLikedChannels();
+}
+
+function toggleLike() {
+  if (hasLike(currentTrack)) {
+    removeLike(currentTrack);
+  } else {
+    addToLike(currentTrack);
+  }
 }
 
 function forward() {
@@ -190,17 +246,26 @@ function next(force) {
 }
 
 socket.on("set next", function (track) {
-  setYoutubeTrack(track);
+  nextYoutubeTrack(track);
 });
 socket.on("forward", function () {
   forward();
 });
 socket.on("like", function () {
-  addToLike(currentTrack);
+  toggleLike();
 });
 socket.on("pause", function () {
   if (player && idlePause.checked) {
     player.pauseVideo();
+  }
+});
+socket.on("like added", function (track) {
+  likes.push(track);
+  insertLike(track);
+  updateLikeStatus(track);
+
+  if (likeButton.classList.contains("loader")) {
+    likeButton.classList.remove("loader");
   }
 });
 socket.on("loggedout", function () {
@@ -223,9 +288,5 @@ forwardButton.addEventListener("click", function (event) {
 });
 
 likeButton.addEventListener("click", function (event) {
-  if (hasLike(currentTrack)) {
-    removeLike(currentTrack);
-  } else {
-    addToLike(currentTrack);
-  }
+  toggleLike();
 });

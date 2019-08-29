@@ -1,32 +1,38 @@
 extends ../main.pug
 
 block content
-    div.player
-        div#video
-
-        div#video_name
-
-        div#controls
-            div.control
-                button#next_video.loader Next video
-                    span.shortcut CTRL + ALT + ~
-            div.control
-                button#forward Forward (20s)
-                    span.shortcut CTRL + ALT + PAGE UP
-            div.control
-                button#like Like
-                    span.shortcut CTRL + ALT + *
-
-        div#options.options
-            input(type="checkbox" id="idle_pause" checked)
-            label(for="idle_pause") idle pause (1min)
-
-        div.lists
-            div.likes
+    div.player-wrapper
+        div.left-wing
+            div.likes.content-list
                 h3 Likes
                 div#likes
-            div.history
+
+        div.player
+            div#video
+
+            div#video_name
+
+            div#controls
+                div.control
+                    button#next_video.loader Next video
+                        span.shortcut CTRL + ALT + ~
+                div.control
+                    button#forward Forward (20s)
+                        span.shortcut CTRL + ALT + PAGE UP
+                div.control
+                    button#like Like
+                        span.shortcut CTRL + ALT + *
+
+            div#options.options
+                input(type="checkbox" id="idle_pause" checked)
+                label(for="idle_pause") idle pause (1min)
+
+        div.right-wing
+            div.history.content-list
                 h3 History
                 div#history
+            div.channels.content-list
+                h3 Most liked channels
+                div#channels
 
-    div.animation
+    //div.animation

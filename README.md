@@ -2,7 +2,12 @@
 
 Yousubs is here to make it easier going through all the youtube
 subscription notification emails. Reduce all those click to just
-a setup and global shortcuts. Best suited for music.
+a setup and global shortcuts. Best suited for listening to music 
+when gaming or programming.
+
+This application requires you to have multiple subscriptions to 
+various youtube channels for which you receive upload emails in
+order to keep feeding it. 
 
 ## Legend
 
@@ -18,6 +23,7 @@ a setup and global shortcuts. Best suited for music.
 - Cleans emails that you listened to.
 - Adds global shortcuts for liking, skipping and forwarding so you 
 can play or do other things meanwhile listening.
+- Keeps track of most liked channels based on liked videos.
 - Keeps history of played tracks.
 - Skips tracks that have been removed.
 - Optional IDLE pause so that you don't miss any tracks.
@@ -36,7 +42,9 @@ can play or do other things meanwhile listening.
 
 1. Open a shell and run ``yousubs``. This will start a server
 and open the application in your primary browser.
-2. Create an account on the opened page, login and enjoy.
+2. Create an account on the opened page with a gmail account that
+has youtube subscription mails.
+3. Login and enjoy.
 
 ## How it works
 

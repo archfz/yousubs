@@ -1,5 +1,7 @@
 import YousubsCommand from "../Util/YousubsCommand";
 import ListenHistoryRepository from "../Repository/ListenHistoryRepository";
+import {AxiosResponse} from "axios";
+const axios = require("axios");
 const iohook = require("iohook");
 const desktopIdle = require("desktop-idle");
 
@@ -65,10 +67,13 @@ export default class YousubsSocket {
       this.session.user.history = this.listenRepo.getHistory();
       this.session.user.likes = this.listenRepo.getLikes();
 
-      socket.emit("history", this.session.user.history);
-      socket.emit("likes", this.session.user.likes);
+      this.migrateTrackChannelInfo(this.session.user.likes)
+        .then(() => {
+          socket.emit("history", this.session.user.history);
+          socket.emit("likes", this.session.user.likes);
 
-      YousubsSocket.openSockets.push(this);
+          YousubsSocket.openSockets.push(this);
+        }).catch(console.error);
     } else {
       console.error("Socket io initialized without session.");
     }
@@ -113,10 +118,37 @@ export default class YousubsSocket {
       return;
     }
 
-    if (!this.session.user.likes.find((l: any) => l.videoId === like.videoId)) {
-      this.session.user.likes.push(like);
-      this.listenRepo.saveLikes(this.session.user.likes);
-    }
+    this.appendChannelInfo(like)
+      .then((like) => {
+        if (!this.session.user.likes.find((l: any) => l.videoId === like.videoId)) {
+          this.session.user.likes.push(like);
+          this.listenRepo.saveLikes(this.session.user.likes);
+          this.socket.emit("like added", like);
+        }
+      })
+      .catch(console.error);
+  }
+
+  public migrateTrackChannelInfo(tracks: any[]): Promise<any> {
+    let promise: any[] = tracks.map((track: any) => {
+      if (!track.channelUser) {
+        return this.appendChannelInfo(track);
+      } else {
+        return Promise.resolve(track);
+      }
+    });
+
+    return Promise.all(promise).then((tracks) => this.listenRepo.saveLikes(tracks));
+  }
+
+  public appendChannelInfo(track: any): Promise<any> {
+    return axios.get('https://www.youtube.com/watch?v=' + track.videoId)
+      .then((response: AxiosResponse) => {
+        const match = response.data.match(/"\/user\/([^"]+)"/);
+        track.channelUser = match[1];
+
+        return track;
+      });
   }
 
   public removeLike(like: any) {
