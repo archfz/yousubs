@@ -11,8 +11,8 @@ order to keep feeding it.
 
 ## Legend
 
+- [Features](#Features)
 - [Installation](#Installation)
-- [Benefits](#benefits)
 - [Usage](#usage)
 - [How it works](#how-it-works)
 
