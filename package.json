@@ -1,6 +1,6 @@
 {
   "name": "yousubs",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Local website that plays your youtube subscription emails. (gmail)",
   "repository": "https://github.com/archfz/yousubs",
   "main": "start.js",
