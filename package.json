@@ -43,7 +43,7 @@
     "@types/method-override": "0.0.31",
     "@types/morgan": "^1.7.35",
     "@types/node": "^10.3.2",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "commander": "^2.15.1",
     "configstore": "^3.1.2",
     "cookie-parser": "^1.4.3",
